@@ -1,0 +1,37 @@
+plugins {
+    id "com.android.library"
+    id "kotlin-android"
+}
+
+apply from: "$rootDir/code_coverage_module_android.gradle"
+apply from: "$rootDir/maven_publish_android.gradle"
+apply from: "$rootDir/android_shared.gradle"
+
+android {
+    defaultConfig {
+        buildConfigField("String", "BASE_URL", '"https://api.mapbox.com"')
+        buildConfigField("String", "API_KEY", '"pk.eyJ1IjoieC1zeWFpZnVsbGFoLXgiLCJhIjoiY2tnN3V0YjZpMDc0YTJ5bWg2bWJwZzhxYiJ9.T-GO8Nq-mSh9KTK3iZu0Sg"')
+    }
+}
+
+dependencies {
+
+    implementation project(':map_box:map_box_search:map_box_search_domain')
+
+    api "com.squareup.retrofit2:retrofit:$vRetrofit"
+    api "com.squareup.retrofit2:converter-gson:$vRetrofit"
+
+    api "com.google.code.gson:gson:$vGson"
+
+    api "androidx.room:room-runtime:$vRoom"
+    api "androidx.room:room-ktx:$vRoom"
+    androidTestImplementation "androidx.room:room-testing:$vRoom"
+
+    testImplementation "junit:junit:$vJunit"
+    testImplementation "org.mockito:mockito-core:$vMockito"
+    testImplementation "org.mockito:mockito-inline:$vMockito"
+
+    androidTestImplementation "androidx.test.ext:junit-ktx:$vAndroidJunit"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$vEspresso"
+    androidTestImplementation "com.android.support.test:rules:$vTestRules"
+}

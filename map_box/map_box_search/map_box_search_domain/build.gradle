@@ -1,0 +1,26 @@
+plugins {
+    id "com.android.library"
+    id "kotlin-android"
+    id "kotlin-parcelize"
+}
+
+apply from: "$rootDir/code_coverage_module_android.gradle"
+apply from: "$rootDir/maven_publish_android.gradle"
+apply from: "$rootDir/android_shared.gradle"
+
+dependencies {
+
+    api project(":common-android-domain")
+
+    api "io.insert-koin:koin-core:$vKoin"
+    api "io.insert-koin:koin-android:$vKoin"
+    testImplementation "io.insert-koin:koin-test:$vKoin"
+
+    testImplementation "junit:junit:$vJunit"
+    testImplementation "org.mockito:mockito-core:$vMockito"
+    testImplementation "org.mockito:mockito-inline:$vMockito"
+
+    androidTestImplementation "androidx.test.ext:junit-ktx:$vAndroidJunit"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$vEspresso"
+    androidTestImplementation "com.android.support.test:rules:$vTestRules"
+}

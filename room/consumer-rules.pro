@@ -1,0 +1,1 @@
+-keepclassmembers,allowobfuscation class id.xxx.module.data.local.converters.ListConverter.** { *; }

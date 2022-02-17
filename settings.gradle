@@ -1,0 +1,46 @@
+rootProject.name = "Android Module"
+
+include(
+        ":auth",
+        ":auth:auth_data",
+        ":auth:auth_domain",
+        ":auth:auth_presentation",
+
+        ':handle-data',
+
+        ":common-test",
+
+        ":common-android",
+
+        ":common-android-domain",
+
+        ':handle-crash',
+
+        ":di-with-dagger",
+
+        ":dynamic-feature",
+
+        ":map_box",
+        ":map_box:map_box_search",
+        ":map_box:map_box_search:map_box_search_presentation",
+        ":map_box:map_box_search:map_box_search_domain",
+        ":map_box:map_box_search:map_box_search_data",
+
+        ":model",
+
+        ":presentation",
+
+        ":presentation-base",
+
+        ":security",
+
+        ":started-android-library",
+
+        ":started-java-library",
+
+        ":retrofit",
+
+        ":room",
+
+        ":viewbinding",
+)

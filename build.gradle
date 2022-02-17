@@ -1,0 +1,32 @@
+buildscript {
+
+    apply from: "versions.gradle"
+
+    addRepos(repositories)
+
+    dependencies {
+        classpath "com.android.tools.build:gradle:$vGradle"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$vKotlin"
+    }
+}
+
+allprojects {
+    addRepos(repositories)
+
+    String user = System.getProperty("user.name")
+    if (user == "xxx") {
+        buildDir = "/tmp/android-studio/build/${rootProject.name}/${project.name}/build"
+    }
+
+    // handle warning This class can only be used with the compiler argument '-opt-in=kotlin.RequiresOptIn'
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile)
+            .configureEach {
+                kotlinOptions {
+                    freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
+                }
+            }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

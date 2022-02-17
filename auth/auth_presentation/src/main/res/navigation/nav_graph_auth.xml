@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/fragment_welcome">
+
+    <fragment
+        android:id="@+id/fragment_welcome"
+        android:name="id.xxx.auth.presentation.ui.WelcomeFragment"
+        android:label="@string/welcome"
+        tools:layout="@layout/fragment_welcome">
+
+        <action
+            android:id="@+id/move_to_fragment_sign_up"
+            app:destination="@id/fragment_sign_up" />
+        <action
+            android:id="@+id/move_to_fragment_sign_with_email"
+            app:destination="@+id/fragment_sign_with_email" />
+        <action
+            android:id="@+id/move_to_fragment_sign_with_token"
+            app:destination="@+id/fragment_sign_with_token" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_sign_up"
+        android:name="id.xxx.auth.presentation.ui.sign.up.SignUpFragment"
+        android:label="Sign Up"
+        tools:layout="@layout/fragment_sign_up">
+        <action
+            android:id="@+id/move_to_fragment_verify"
+            app:destination="@+id/fragment_verify"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/fragment_sign_up"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_sign_with_email"
+        android:name="id.xxx.auth.presentation.ui.sign.in.SignInWithEmailFragment"
+        android:label="@string/sign_in_with_email"
+        tools:layout="@layout/fragment_sign_in_with_email">
+        <action
+            android:id="@+id/sign_in_move_to_fragment_verify"
+            app:destination="@+id/fragment_verify"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/fragment_sign_with_email"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_sign_with_token"
+        android:name="id.xxx.auth.presentation.ui.sign.in.SignInWithTokenFragment"
+        android:label="Sign With Token"
+        tools:layout="@layout/fragment_sign_in_with_token" />
+
+    <fragment
+        android:id="@+id/fragment_verify"
+        android:name="id.xxx.auth.presentation.ui.verify.VerifyFragment"
+        android:label="@string/label_verify_fragment"
+        tools:layout="@layout/fragment_verify">
+        <action
+            android:id="@+id/move_to_fragment_welcome"
+            app:destination="@id/fragment_welcome"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/fragment_welcome"
+            app:popUpToInclusive="true" />
+    </fragment>
+</navigation>

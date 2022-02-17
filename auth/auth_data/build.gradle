@@ -1,0 +1,43 @@
+plugins {
+    id "com.android.library"
+    id "kotlin-android"
+    id "kotlin-kapt"
+}
+
+apply from: "$rootDir/code_coverage_module_android.gradle"
+apply from: "$rootDir/maven_publish_android.gradle"
+apply from: "$rootDir/android_shared.gradle"
+
+android {
+    defaultConfig {
+        testInstrumentationRunner "id.xxx.auth.data.runner.AndroidJUnitRunner"
+    }
+}
+
+dependencies {
+    api project(':handle-data')
+    api project(":auth:auth_domain")
+
+    api "androidx.room:room-runtime:$vRoom"
+    api "androidx.room:room-ktx:$vRoom"
+    kapt "androidx.room:room-compiler:$vRoom"
+    androidTestImplementation "androidx.room:room-testing:$vRoom"
+
+    api "androidx.work:work-runtime:$vWork"
+    api "androidx.work:work-runtime-ktx:$vWork"
+    api "androidx.work:work-gcm:$vWork"
+    androidTestImplementation "androidx.work:work-testing:$vWork"
+
+    implementation platform("com.google.firebase:firebase-bom:$vFirebaseBom")
+    api "com.google.firebase:firebase-auth"
+    api "com.google.firebase:firebase-messaging"
+
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.1.1"
+
+    testImplementation "junit:junit:$vJunit"
+    testImplementation "org.mockito:mockito-core:$vMockito"
+    testImplementation "org.mockito:mockito-inline:$vMockito"
+
+    androidTestImplementation "androidx.test.ext:junit-ktx:$vAndroidJunit"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$vEspresso"
+}

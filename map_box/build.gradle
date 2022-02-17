@@ -1,0 +1,23 @@
+plugins {
+    id "com.android.library"
+    id "kotlin-android"
+    id "kotlin-kapt"
+}
+
+apply from: "$rootDir/code_coverage_module_android.gradle"
+apply from: "$rootDir/maven_publish_android.gradle"
+apply from: "$rootDir/android_shared.gradle"
+
+dependencies {
+    api project(":map_box:map_box_search")
+
+    kapt "androidx.room:room-compiler:$vRoom"
+
+    testImplementation "junit:junit:$vJunit"
+    testImplementation "org.mockito:mockito-core:$vMockito"
+    testImplementation "org.mockito:mockito-inline:$vMockito"
+
+    androidTestImplementation "androidx.test.ext:junit-ktx:$vAndroidJunit"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$vEspresso"
+    androidTestImplementation "com.android.support.test:rules:$vTestRules"
+}

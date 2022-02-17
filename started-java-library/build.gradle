@@ -1,0 +1,19 @@
+plugins {
+    id "java-library"
+    id "kotlin"
+}
+
+apply from: "$rootDir/code_coverage_module_java.gradle"
+//apply from: "$rootDir/maven_publish_java.gradle"
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+dependencies {
+
+    testImplementation "junit:junit:$vJunit"
+    testImplementation "org.mockito:mockito-core:$vMockito"
+    testImplementation "org.mockito:mockito-inline:$vMockito"
+}
