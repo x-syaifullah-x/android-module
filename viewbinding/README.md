@@ -142,3 +142,10 @@ dependencies {
 }
 ```
 ---
+Proguard
+-
+using data binding add this in proguard if minifyEnabled true
+```proguard
+-keepclassmembers class ${PACKAGE_NAME}.databinding.** {*;}
+```
+---

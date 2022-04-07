@@ -11,13 +11,13 @@ import id.xxx.auth.domain.model.SignUpModel
 import id.xxx.auth.presentation.R
 import id.xxx.auth.presentation.databinding.FragmentSignUpBinding
 import id.xxx.auth.presentation.helper.InputValidation
-import id.xxx.auth.presentation.ui.AuthEmailViewModel
 import id.xxx.auth.presentation.helper.asFlow
+import id.xxx.auth.presentation.ui.AuthEmailViewModel
 import id.xxx.auth.presentation.ui.Utils
 import id.xxx.auth.presentation.ui.Utils.emailIsValid
 import id.xxx.auth.presentation.ui.Utils.nameIsValid
-import id.xxx.module.model.sealed.Resource
-import id.xxx.module.model.sealed.Resource.Companion.whenNoReturn
+import id.xxx.module.model.sealed.ResourceSealed
+import id.xxx.module.model.sealed.ResourceSealed.Companion.whenNoReturn
 import id.xxx.module.view.binding.ktx.viewBinding
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.map
@@ -46,34 +46,34 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
         val inputName = binding.inputName
 
         inputName.asFlow().map { nameIsValid(it) }.asLiveData()
-            .observe(viewLifecycleOwner, {
+            .observe(viewLifecycleOwner) {
                 inputName.error = if (it) null else "Field Name Not Valid"
                 viewModel.setStateSignUp(
                     AuthEmailViewModel.KEY_NAME_SIGN_UP,
                     inputName.error == null
                 )
-            })
+            }
 
-        inputEmail.asFlow().map { emailIsValid(it) }.asLiveData().observe(viewLifecycleOwner, {
+        inputEmail.asFlow().map { emailIsValid(it) }.asLiveData().observe(viewLifecycleOwner) {
             inputEmail.error = if (it) null else "Field Email Not Valid"
             viewModel.setStateSignUp(AuthEmailViewModel.KEY_EMAIL_SIGN_UP, inputEmail.error == null)
-        })
+        }
 
         inputPassword.asFlow().map { Utils.passwordValidation(it) }
             .asLiveData()
-            .observe(viewLifecycleOwner, {
+            .observe(viewLifecycleOwner) {
                 inputPassword.error = if (it is InputValidation.NotValid) it.message else null
                 viewModel.setStateSignUp(
                     AuthEmailViewModel.KEY_PASSWORD_SIGN_UP, inputPassword.error == null
                 )
-            })
+            }
 
         viewModel.getStatSignUpLiveData()
-            .observe(viewLifecycleOwner, { binding.btnSignUp.isEnabled = it })
+            .observe(viewLifecycleOwner) { binding.btnSignUp.isEnabled = it }
     }
 
-    private fun statCreateUser(resource: Resource<SignUpModel>) {
-        resource.whenNoReturn(
+    private fun statCreateUser(resourceSealed: ResourceSealed<SignUpModel>) {
+        resourceSealed.whenNoReturn(
             blockLoading = {
                 showLoading(true)
             },

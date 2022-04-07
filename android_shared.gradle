@@ -5,8 +5,8 @@ android {
     defaultConfig {
         minSdkVersion build_versions.min_sdk
         targetSdkVersion build_versions.target_sdk
-        versionCode build_versions.version_code
-        versionName build_versions.version_name
+        versionCode build_versions.code
+        versionName build_versions.name
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -30,15 +30,5 @@ android {
     testOptions {
         unitTests.returnDefaultValues = true
         unitTests.includeAndroidResources = true
-    }
-}
-
-dependencies {
-
-    /* handle circular dependencies */
-    if (project.name != "common-test") {
-        implementation project(":common-test")
-        testImplementation project(":common-test")
-        androidTestImplementation project(":common-test")
     }
 }

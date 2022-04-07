@@ -1,17 +1,16 @@
 package id.xxx.module.domain.mediator
 
 import id.xxx.module.data.mediator.ResourceNetworkBound
-import id.xxx.module.model.sealed.Result
-import id.xxx.module.model.sealed.Result.Companion.whenNoReturn
+import id.xxx.module.model.sealed.NetworkResponse
+import id.xxx.module.model.sealed.NetworkResponse.Companion.whenNoReturn
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 
-class ResourceNetworkBoundTest {
+class ResourceSealedNetworkBoundTest {
     @Test
     fun test() = runBlocking<Unit> {
 
@@ -36,7 +35,7 @@ class ResourceNetworkBoundTest {
                 false
             },
             blockFetch = {
-                flowOf(Result.Success("data_from_fetch"))
+                flowOf(NetworkResponse.Success("data_from_fetch"))
             },
             blockOnFetch = { r, _ ->
                 r.whenNoReturn(

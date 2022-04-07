@@ -28,6 +28,7 @@ dependencies {
 
     api "androidx.appcompat:appcompat:$vAppCompat"
     api "androidx.fragment:fragment-ktx:$vFragmentKtx"
+
     debugImplementation "androidx.fragment:fragment-testing:$vFragmentKtx"
 
     testImplementation "junit:junit:$vJunit"

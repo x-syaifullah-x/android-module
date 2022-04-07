@@ -10,8 +10,8 @@ import id.xxx.auth.presentation.R
 import id.xxx.auth.presentation.databinding.FragmentVerifyBinding
 import id.xxx.auth.presentation.ui.AuthActivity.Companion.getAuthDestination
 import id.xxx.auth.presentation.ui.AuthEmailViewModel
-import id.xxx.module.model.sealed.Resource
-import id.xxx.module.model.sealed.Resource.Companion.whenNoReturn
+import id.xxx.module.model.sealed.ResourceSealed
+import id.xxx.module.model.sealed.ResourceSealed.Companion.whenNoReturn
 import id.xxx.module.presentation.base.ktx.startActivity
 import id.xxx.module.view.binding.ktx.viewBinding
 import org.koin.android.ext.android.inject
@@ -66,7 +66,7 @@ class VerifyFragment : Fragment(R.layout.fragment_verify) {
 
         binding.btnConfirmVerifyEmail.setOnClickListener {
             viewModel.isVerify().observe(viewLifecycleOwner) { isVerify ->
-                if (isVerify is Resource.Success && isVerify.data) {
+                if (isVerify is ResourceSealed.Success && isVerify.data) {
                     if (clazzName != null) {
                         requireActivity().startActivity(clazzName)
                             .apply { requireActivity().finish() }

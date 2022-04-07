@@ -15,7 +15,8 @@ android {
 }
 
 dependencies {
-    api project(':handle-data')
+    api project(":common-test")
+    api project(":handle-data")
     api project(":auth:auth_domain")
 
     api "androidx.room:room-runtime:$vRoom"
@@ -32,12 +33,15 @@ dependencies {
     api "com.google.firebase:firebase-auth"
     api "com.google.firebase:firebase-messaging"
 
-    api "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.1.1"
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:$vCoroutines"
 
+    testImplementation project(":common-test")
     testImplementation "junit:junit:$vJunit"
     testImplementation "org.mockito:mockito-core:$vMockito"
     testImplementation "org.mockito:mockito-inline:$vMockito"
 
     androidTestImplementation "androidx.test.ext:junit-ktx:$vAndroidJunit"
     androidTestImplementation "androidx.test.espresso:espresso-core:$vEspresso"
+    androidTestImplementation "com.android.support.test:rules:$vTestRules"
+    androidTestImplementation project(":common-test")
 }

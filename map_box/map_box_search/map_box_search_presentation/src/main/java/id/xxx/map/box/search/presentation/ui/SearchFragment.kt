@@ -12,8 +12,8 @@ import id.xxx.map.box.search.presentation.R
 import id.xxx.map.box.search.presentation.adapter.SearchAdapter
 import id.xxx.map.box.search.presentation.databinding.FragmentSearchBinding
 import id.xxx.map.box.search.presentation.ui.SearchActivity.Companion.DATA_EXTRA
-import id.xxx.module.model.sealed.Resource
-import id.xxx.module.model.sealed.Resource.Companion.whenNoReturn
+import id.xxx.module.model.sealed.ResourceSealed
+import id.xxx.module.model.sealed.ResourceSealed.Companion.whenNoReturn
 import id.xxx.module.presentation.base.ktx.setResult
 import id.xxx.module.view.binding.ktx.viewBinding
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -39,10 +39,10 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         viewModel.searchAutoComplete.observe(viewLifecycleOwner, this::statSearch)
     }
 
-    private fun statSearch(resource: Resource<List<PlacesModel>>) {
-        binding.pbLoading.isVisible = resource is Resource.Loading
-        binding.groupEmpty.isVisible = resource is Resource.Empty
-        resource.whenNoReturn(
+    private fun statSearch(resourceSealed: ResourceSealed<List<PlacesModel>>) {
+        binding.pbLoading.isVisible = resourceSealed is ResourceSealed.Loading
+        binding.groupEmpty.isVisible = resourceSealed is ResourceSealed.Empty
+        resourceSealed.whenNoReturn(
             blockSuccess = { adapter.submitData(it) },
             blockEmpty = { adapter.submitData(listOf()) },
             blockError = { data, e ->
