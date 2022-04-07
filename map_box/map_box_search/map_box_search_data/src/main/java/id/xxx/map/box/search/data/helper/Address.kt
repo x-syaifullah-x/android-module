@@ -6,13 +6,14 @@ import id.xxx.module.data.helper.DataHelper
 import java.util.*
 
 class Address private constructor(context: Context) {
+
     companion object {
         @Volatile
-        private var instance: Address? = null
+        private var INSTANCE: Address? = null
 
-        fun getInstance(context: Context): Address {
-            instance ?: synchronized(this) { instance = Address(context) }
-            return instance as Address
+        fun getInstance(context: Context) = INSTANCE ?: synchronized(this) {
+            INSTANCE ?: Address(context)
+                .also { INSTANCE = it }
         }
 
         fun isLatLong(value: String): Boolean =
@@ -23,20 +24,19 @@ class Address private constructor(context: Context) {
 
     suspend fun geoCoder(value: String) = DataHelper.get(
         blockFetch = {
-            if (isLatLong(value)) {
-                val stringTokenizer = StringTokenizer(value.replace("\\s".toRegex(), ""), ",")
-                val data = doubleArrayOf(
-                    stringTokenizer.nextToken().toDouble(),
-                    stringTokenizer.nextToken().toDouble()
-                )
-                val latitude = data[0]
-                val longitude = data[1]
-                val listAddress = geoCoder.getFromLocation(latitude, longitude, 1)
-                if (listAddress.isNotEmpty()) listAddress[0] else null
-            } else {
-                val listAddress = geoCoder.getFromLocationName(value, 1)
-                if (listAddress.isNotEmpty()) listAddress[0] else null
+            val result = runCatching {
+                if (isLatLong(value)) {
+                    val stringTokenizer = StringTokenizer(value.replace("\\s".toRegex(), ""), ",")
+                    val latitude = stringTokenizer.nextToken().toDouble()
+                    val longitude = stringTokenizer.nextToken().toDouble()
+                    val listAddress = geoCoder.getFromLocation(latitude, longitude, 1)
+                    if (listAddress.isNotEmpty()) listAddress[0] else null
+                } else {
+                    val listAddress = geoCoder.getFromLocationName(value, 1)
+                    if (listAddress.isNotEmpty()) listAddress[0] else null
+                }
             }
+            return@get result.getOrNull()
         }
     )
 }

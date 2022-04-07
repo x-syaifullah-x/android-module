@@ -19,25 +19,27 @@ class CrashHandler private constructor() : Thread.UncaughtExceptionHandler {
         }
     }
 
-    private val tUEH = Thread.getDefaultUncaughtExceptionHandler()
+    private val uncaughtExceptionHandler: Thread.UncaughtExceptionHandler? =
+        Thread.getDefaultUncaughtExceptionHandler()
 
-    private val ares by lazy { ArrayList<AbstractReceiveError>() }
+    private val receiverErrors by lazy { HashSet<AbstractReceiveError>() }
 
-    fun <ARE : AbstractReceiveError> register(are: ARE) = ares.add(are)
+    fun <T : AbstractReceiveError> register(receiverError: T) =
+        receiverErrors.add(receiverError)
 
     override fun uncaughtException(thread: Thread, throwable: Throwable) {
         val sw = StringWriter()
         val pw = PrintWriter(sw)
         try {
             throwable.printStackTrace(pw)
-            ares.forEach { re ->
+            receiverErrors.forEach { re ->
                 re.onError("$sw", throwable)
             }
         } finally {
             pw.close()
             sw.close()
-            if (tUEH != null) {
-                tUEH.uncaughtException(thread, throwable)
+            if (uncaughtExceptionHandler != null) {
+                uncaughtExceptionHandler.uncaughtException(thread, throwable)
             } else {
                 exitProcess(1)
             }

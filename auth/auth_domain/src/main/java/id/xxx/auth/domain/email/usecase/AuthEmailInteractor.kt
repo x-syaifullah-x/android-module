@@ -3,20 +3,20 @@ package id.xxx.auth.domain.email.usecase
 import id.xxx.auth.domain.model.SignInModel
 import id.xxx.auth.domain.model.SignUpModel
 import id.xxx.auth.domain.model.UserModel
-import id.xxx.module.model.sealed.Resource
+import id.xxx.module.domain.model.resources.Resources
 import kotlinx.coroutines.flow.Flow
 
 interface AuthEmailInteractor {
 
-    fun signUp(email: String, password: String): Flow<Resource<SignUpModel>>
+    fun signUp(email: String, password: String): Flow<Resources<SignUpModel>>
 
-    fun isVerify(): Flow<Resource<Boolean>>
+    fun isVerify(): Flow<Resources<Boolean>>
 
-    fun sendVerify(): Flow<Resource<String>>
+    fun sendVerify(): Flow<Resources<String>>
 
-    fun signIn(email: String, password: String): Flow<Resource<SignInModel>>
+    fun signIn(email: String, password: String): Flow<Resources<SignInModel>>
 
-    fun signOut(): Flow<Resource<Boolean>>
+    fun signOut(): Flow<Resources<Boolean>>
 
-    fun currentUser(): Flow<Resource<UserModel>>
+    fun currentUser(): Flow<Resources<UserModel>>
 }

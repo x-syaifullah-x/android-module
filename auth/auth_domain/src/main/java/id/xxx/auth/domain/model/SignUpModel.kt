@@ -1,6 +1,6 @@
 package id.xxx.auth.domain.model
 
-import id.xxx.module.model.IModel
+import id.xxx.module.domain.model.IModel
 
 data class SignUpModel(
 

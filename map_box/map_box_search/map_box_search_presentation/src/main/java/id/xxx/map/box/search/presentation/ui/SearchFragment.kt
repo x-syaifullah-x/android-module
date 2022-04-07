@@ -11,9 +11,9 @@ import id.xxx.map.box.search.domain.model.PlacesModel
 import id.xxx.map.box.search.presentation.R
 import id.xxx.map.box.search.presentation.adapter.SearchAdapter
 import id.xxx.map.box.search.presentation.databinding.FragmentSearchBinding
-import id.xxx.map.box.search.presentation.ui.SearchActivity.Companion.DATA_EXTRA
-import id.xxx.module.model.sealed.Resource
-import id.xxx.module.model.sealed.Resource.Companion.whenNoReturn
+import id.xxx.map.box.search.presentation.ui.SearchActivityAppCompatActivity.Companion.DATA_EXTRA
+import id.xxx.module.domain.model.resources.Resources
+import id.xxx.module.domain.model.resources.Resources.Companion.`when`
 import id.xxx.module.presentation.base.ktx.setResult
 import id.xxx.module.view.binding.ktx.viewBinding
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -39,18 +39,19 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         viewModel.searchAutoComplete.observe(viewLifecycleOwner, this::statSearch)
     }
 
-    private fun statSearch(resource: Resource<List<PlacesModel>>) {
-        binding.pbLoading.isVisible = resource is Resource.Loading
-        binding.groupEmpty.isVisible = resource is Resource.Empty
-        resource.whenNoReturn(
-            blockSuccess = { adapter.submitData(it) },
-            blockEmpty = { adapter.submitData(listOf()) },
-            blockError = { data, e ->
-                if (!data.isNullOrEmpty()) {
-                    adapter.submitData(data)
-                } else {
-                    Toast.makeText(requireContext(), e.localizedMessage, Toast.LENGTH_SHORT).show()
-                }
+    private fun statSearch(resources: Resources<List<PlacesModel>>) {
+        binding.pbLoading.isVisible = resources is Resources.Loading
+        binding.groupEmpty.isVisible = resources is Resources.Empty
+        resources.`when`(
+            success = { adapter.submitData(it) },
+            empty = { adapter.submitData(listOf()) },
+            error = { err ->
+//                if (!data.isNullOrEmpty()) {
+//                    adapter.submitData(data)
+//                } else {
+//                    Toast.makeText(requireContext(), e.localizedMessage, Toast.LENGTH_SHORT).show()
+//                }
+                Toast.makeText(requireContext(), err.localizedMessage, Toast.LENGTH_SHORT).show()
             },
         )
     }

@@ -1,6 +1,6 @@
 package id.xxx.module.data.helper
 
-import id.xxx.module.model.sealed.Result
+import id.xxx.module.domain.model.results.Results
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
@@ -12,22 +12,27 @@ class DataHelper<Type> private constructor() {
 
     companion object {
         @Volatile
-        private var instance: DataHelper<*>? = null
+        private var INSTANCE: DataHelper<*>? = null
 
         @Suppress("UNCHECKED_CAST")
         @PublishedApi
         internal fun <Type> getInstance() =
-            (instance ?: synchronized(DataHelper::class) {
-                instance ?: DataHelper<Type>().also { instance = it }
+            (INSTANCE ?: synchronized(DataHelper::class) {
+                INSTANCE ?: DataHelper<Type>()
+                    .also { INSTANCE = it }
             }) as DataHelper<Type>
 
         suspend inline fun <T> get(
             crossinline blockFetch: suspend () -> T?,
         ) = try {
             val data = blockFetch()
-            if (data != null) Result.Success(data) else Result.Empty
+            if (data != null) {
+                Results.Success(data)
+            } else {
+                Results.Error(NullPointerException())
+            }
         } catch (e: Throwable) {
-            Result.Error(e)
+            Results.Error(e)
         }
 
         inline fun <ResultType> getAsFlow(
@@ -36,9 +41,13 @@ class DataHelper<Type> private constructor() {
         ) = flow {
             val resultType = blockFetch()
             val result =
-                if (resultType != null && blockOnFetch(resultType)) Result.Success(resultType) else Result.Empty
+                if (resultType != null && blockOnFetch(resultType)) {
+                    Results.Success(resultType)
+                } else {
+                    Results.Error(NullPointerException())
+                }
             emit(result)
-        }.catch { emit(Result.Error(it)) }
+        }.catch { emit(Results.Error(it)) }
 
         inline fun <ResultType> getAsFlow(
             crossinline blockOnOpen: suspend (OnResult<ResultType>) -> Unit,
@@ -50,7 +59,9 @@ class DataHelper<Type> private constructor() {
     }
 
     interface OnResult<T> {
-        fun success(data: T?)
+
+        fun success(data: T)
+
         fun error(err: Throwable)
     }
 
@@ -58,14 +69,10 @@ class DataHelper<Type> private constructor() {
         blockOnOpen: suspend (OnResult<Type>) -> Unit,
         blockOnClose: () -> Unit = {}
     ) =
-        @Suppress("EXPERIMENTAL_API_USAGE")
         callbackFlow {
             val onResult = object : OnResult<Type> {
-                override fun success(data: Type?) {
-                    val result = data
-                        ?.run { onResultSuccess(this) }
-                        ?: onResultEmpty()
-                    trySend(result)
+                override fun success(data: Type) {
+                    trySend(onResultSuccess(data))
                 }
 
                 override fun error(err: Throwable) {
@@ -80,15 +87,11 @@ class DataHelper<Type> private constructor() {
             emit(onResultError(it))
         }.flowOn(Dispatchers.IO)
 
-    private fun onResultSuccess(data: Type): Result.Success<Type> {
-        return Result.Success(data)
+    private fun onResultSuccess(data: Type): Results.Success<Type> {
+        return Results.Success(data)
     }
 
-    private fun onResultEmpty(): Result.Empty {
-        return Result.Empty
-    }
-
-    private fun onResultError(err: Throwable): Result.Error {
-        return Result.Error(err)
+    private fun onResultError(err: Throwable): Results.Error {
+        return Results.Error(err)
     }
 }

@@ -1,7 +1,7 @@
 # Module Presentation Base
 
 ```bash
-gradlew :presentation_base:publishToMavenLocal
+gradlew :presentation-base:publishToMavenLocal
 ```
 
 ```gradle
@@ -10,7 +10,8 @@ repositories {
 }
 
 dependencies {
-    implementation "id.xxx.module:presentation_base:$vModule"
+    implementation "id.xxx.module:presentation-base:$vModule"
 }
 ```
+
 ---

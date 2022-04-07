@@ -1,17 +1,25 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="id.xxx.module.view.binding">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <application>
+    <application android:name="id.xxx.module.AndroidJUnitRunner$App">
 
         <activity
             android:name="id.xxx.module.presentation.activity.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
 
+        <activity
+            android:name="id.xxx.module.presentation.fragment.MainFragmentActivity"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.Light">
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
     </application>
-
 </manifest>

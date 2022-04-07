@@ -2,7 +2,7 @@ package id.xxx.auth.data.email.source.local.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import id.xxx.module.model.IModel
+import id.xxx.module.domain.model.IModel
 
 @Entity(
     tableName = "user"

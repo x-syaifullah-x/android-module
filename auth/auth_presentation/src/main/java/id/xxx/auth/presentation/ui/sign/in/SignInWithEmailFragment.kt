@@ -13,11 +13,10 @@ import id.xxx.auth.presentation.R
 import id.xxx.auth.presentation.databinding.FragmentSignInWithEmailBinding
 import id.xxx.auth.presentation.helper.InputValidation
 import id.xxx.auth.presentation.helper.asFlow
-import id.xxx.auth.presentation.ui.AuthActivity.Companion.getAuthDestination
+import id.xxx.auth.presentation.ui.AuthActivityAppCompatActivity.Companion.getAuthDestination
 import id.xxx.auth.presentation.ui.AuthEmailViewModel
 import id.xxx.auth.presentation.ui.Utils
-import id.xxx.module.model.sealed.Resource.Companion.whenNoReturn
-import id.xxx.module.presentation.base.ktx.startActivity
+import id.xxx.module.domain.model.resources.Resources.Companion.`when`
 import id.xxx.module.view.binding.ktx.viewBinding
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.map
@@ -42,25 +41,25 @@ class SignInWithEmailFragment : Fragment(R.layout.fragment_sign_in_with_email) {
         }
 
         inputEmail.asFlow().map { Utils.emailIsValid(it) }.asLiveData()
-            .observe(viewLifecycleOwner, {
+            .observe(viewLifecycleOwner) {
                 inputEmail.error = if (it) null else "Email Not Valid"
                 viewModel.setStateSignIn(
                     AuthEmailViewModel.KEY_EMAIL_SIGN_IN,
                     inputEmail.error == null
                 )
-            })
+            }
 
         inputPassword.asFlow().map { Utils.passwordValidation(it) }.asLiveData()
-            .observe(viewLifecycleOwner, {
+            .observe(viewLifecycleOwner) {
                 inputPassword.error = if (it is InputValidation.NotValid) it.message else null
                 viewModel.setStateSignIn(
                     AuthEmailViewModel.KEY_PASSWORD_SIGN_IN,
                     inputPassword.error == null
                 )
-            })
+            }
 
         viewModel.getStatSignInLiveData()
-            .observe(viewLifecycleOwner, { binding.login.isEnabled = it })
+            .observe(viewLifecycleOwner) { binding.login.isEnabled = it }
     }
 
     private fun handleClick(view: View) {
@@ -68,12 +67,12 @@ class SignInWithEmailFragment : Fragment(R.layout.fragment_sign_in_with_email) {
             R.id.login -> {
                 viewModel.signIn("${inputEmail.text}", "${inputPassword.text}")
                     .observe(viewLifecycleOwner) {
-                        it.whenNoReturn(
-                            blockLoading = {
+                        it.`when`(
+                            loading = {
                                 binding.loading.isVisible = true
                                 binding.login.isEnabled = false
                             },
-                            blockSuccess = { user ->
+                            success = { user ->
                                 if (user.isVerify) {
                                     val clazzName = requireActivity().intent.getAuthDestination()
                                     if (clazzName != null) {
@@ -88,7 +87,7 @@ class SignInWithEmailFragment : Fragment(R.layout.fragment_sign_in_with_email) {
                                     findNavController().navigate(R.id.sign_in_move_to_fragment_verify)
                                 }
                             },
-                            blockError = { _, throwable ->
+                            error = { _, throwable ->
                                 makeText(
                                     requireContext(),
                                     throwable.localizedMessage,
@@ -97,7 +96,7 @@ class SignInWithEmailFragment : Fragment(R.layout.fragment_sign_in_with_email) {
                                 binding.loading.isVisible = false
                                 binding.login.isEnabled = true
                             },
-                            blockEmpty = {
+                            empty = {
                                 binding.loading.isVisible = false
                                 binding.login.isEnabled = true
                             }

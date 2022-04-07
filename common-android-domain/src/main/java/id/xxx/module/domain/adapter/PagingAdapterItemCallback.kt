@@ -1,7 +1,7 @@
 package id.xxx.module.domain.adapter
 
 import androidx.recyclerview.widget.DiffUtil
-import id.xxx.module.model.IModel
+import id.xxx.module.domain.model.IModel
 
 class PagingAdapterItemCallback<T : IModel<*>> : DiffUtil.ItemCallback<T>() {
 

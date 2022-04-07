@@ -5,14 +5,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import id.xxx.module.presentation.Utils
+import androidx.fragment.app.delegate.viewBinding
+import id.xxx.module.utils.DataUtils
 import id.xxx.module.view.binding.databinding.FragmentMainBinding
-import id.xxx.module.view.binding.ktx.viewBinding
+import org.junit.Assert
 
-class InitialViewInCreateViewFragment : Fragment() {
+class InitialViewInCreateViewFragment : ViewBindingFragment() {
 
-    private val binding by viewBinding<FragmentMainBinding> {
+    override val binding by viewBinding<FragmentMainBinding> {
         Log.i(InitialViewInCreateViewFragment::class.java.simpleName, "$this")
     }
 
@@ -25,6 +25,8 @@ class InitialViewInCreateViewFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.tvHello.text = Utils.TEXT_HELLO_WORD
+        binding.tvHello.text = DataUtils.TEXT_HELLO_WORD
+
+        Assert.assertEquals(DataUtils.TEXT_HELLO_WORD, binding.tvHello.text)
     }
 }

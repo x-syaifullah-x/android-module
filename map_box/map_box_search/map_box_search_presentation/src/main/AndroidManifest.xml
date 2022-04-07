@@ -4,7 +4,7 @@
 
     <application>
         <activity
-            android:name=".ui.SearchActivity"
+            android:name=".ui.SearchActivityAppCompatActivity"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>
 

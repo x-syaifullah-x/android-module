@@ -15,7 +15,7 @@ dependencies {
 
     api project(":model")
 
-    api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$vCoroutinesCore"
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$vCoroutines"
 
     testImplementation "junit:junit:$vJunit"
     testImplementation "org.mockito:mockito-core:$vMockito"

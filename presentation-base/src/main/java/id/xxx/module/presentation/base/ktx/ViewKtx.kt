@@ -37,7 +37,7 @@ fun View.startPostponedEnterTransition(isStart: Boolean) {
     if (isStart) {
         viewTreeObserver.addOnPreDrawListener {
             viewTreeObserver.removeOnPreDrawListener { true }
-            ((context as ContextWrapper).baseContext as Activity).startPostponedEnterTransition()
+            ((context as ContextWrapper).baseContext as? Activity)?.startPostponedEnterTransition()
             return@addOnPreDrawListener true
         }
     }

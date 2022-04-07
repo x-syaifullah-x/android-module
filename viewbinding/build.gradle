@@ -8,8 +8,13 @@ apply from: "$rootDir/maven_publish_android.gradle"
 apply from: "$rootDir/android_shared.gradle"
 
 android {
+
+    String packageName = "id.xxx.module.viewbinding"
+    namespace packageName
+    testNamespace "${packageName}_test"
+
     defaultConfig {
-        testInstrumentationRunner "id.xxx.module.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "id.xxx.module.AndroidJUnitRunner"
     }
 
     buildFeatures {
@@ -17,6 +22,9 @@ android {
     }
 
     sourceSets {
+        main {
+            manifest.srcFile "src/main/AndroidManifest.xml"
+        }
         androidTest {
             manifest.srcFile "src/androidTest/AndroidManifest.xml"
         }
@@ -29,12 +37,12 @@ dependencies {
     api "androidx.appcompat:appcompat:$vAppCompat"
     api "androidx.fragment:fragment-ktx:$vFragmentKtx"
     debugImplementation "androidx.fragment:fragment-testing:$vFragmentKtx"
+    androidTestImplementation "androidx.test.ext:junit-ktx:$vAndroidJunit"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$vEspresso"
+
+    androidTestImplementation "com.android.support.test:rules:$vTestRules"
 
     testImplementation "junit:junit:$vJunit"
     testImplementation "org.mockito:mockito-core:$vMockito"
     testImplementation "org.mockito:mockito-inline:$vMockito"
-
-    androidTestImplementation "androidx.test.ext:junit-ktx:$vAndroidJunit"
-    androidTestImplementation "androidx.test.espresso:espresso-core:$vEspresso"
-    androidTestImplementation "com.android.support.test:rules:$vTestRules"
 }

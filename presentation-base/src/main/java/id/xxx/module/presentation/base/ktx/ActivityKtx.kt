@@ -3,7 +3,6 @@
 package id.xxx.module.presentation.base.ktx
 
 import android.app.Activity
-import android.content.Intent
 import android.os.Build
 import android.view.View
 import android.view.WindowInsets
@@ -27,32 +26,4 @@ fun Activity.hideSystemUI() {
         @Suppress("DEPRECATION")
         window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
     }
-}
-
-inline fun <reified T : Any> Activity.startActivityForResult(
-    requestCode: Int,
-    noinline init: Intent.() -> Unit = {}
-) {
-    val intent = Intent(this, T::class.java)
-    intent.init()
-    startActivityForResult(intent, requestCode)
-}
-
-inline fun Activity.setResult(block: Intent.() -> Unit = {}) {
-    val intent = Intent()
-    block(intent)
-    setResult(Activity.RESULT_OK, intent)
-    finish()
-}
-
-inline fun <reified T : Activity> Activity.startActivity(block: Intent.() -> Unit = {}) {
-    val intent = Intent(this, T::class.java)
-    block(intent)
-    startActivity(intent)
-}
-
-inline fun Activity.startActivity(clazzName: String, block: Intent.() -> Unit = {}) {
-    val intent = Intent(this, Class.forName(clazzName))
-    block(intent)
-    startActivity(intent)
 }

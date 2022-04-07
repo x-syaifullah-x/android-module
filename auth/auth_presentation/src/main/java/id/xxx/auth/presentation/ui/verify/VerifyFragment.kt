@@ -8,11 +8,10 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import id.xxx.auth.presentation.R
 import id.xxx.auth.presentation.databinding.FragmentVerifyBinding
-import id.xxx.auth.presentation.ui.AuthActivity.Companion.getAuthDestination
+import id.xxx.auth.presentation.ui.AuthActivityAppCompatActivity.Companion.getAuthDestination
 import id.xxx.auth.presentation.ui.AuthEmailViewModel
-import id.xxx.module.model.sealed.Resource
-import id.xxx.module.model.sealed.Resource.Companion.whenNoReturn
-import id.xxx.module.presentation.base.ktx.startActivity
+import id.xxx.module.domain.model.resources.Resources
+import id.xxx.module.domain.model.resources.Resources.Companion.`when`
 import id.xxx.module.view.binding.ktx.viewBinding
 import org.koin.android.ext.android.inject
 
@@ -44,8 +43,8 @@ class VerifyFragment : Fragment(R.layout.fragment_verify) {
         val clazzName = requireActivity().intent.getAuthDestination()
 
         viewModel.sendVerify().observe(viewLifecycleOwner) {
-            it.whenNoReturn(
-                blockSuccess = { data ->
+            it.`when`(
+                success = { data ->
                     if (data == "is email verified") {
                         if (clazzName != null) {
                             requireActivity().startActivity(clazzName)
@@ -66,7 +65,7 @@ class VerifyFragment : Fragment(R.layout.fragment_verify) {
 
         binding.btnConfirmVerifyEmail.setOnClickListener {
             viewModel.isVerify().observe(viewLifecycleOwner) { isVerify ->
-                if (isVerify is Resource.Success && isVerify.data) {
+                if (isVerify is Resources.Success && isVerify.result) {
                     if (clazzName != null) {
                         requireActivity().startActivity(clazzName)
                             .apply { requireActivity().finish() }

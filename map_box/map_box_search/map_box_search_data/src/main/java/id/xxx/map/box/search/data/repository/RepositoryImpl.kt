@@ -7,9 +7,9 @@ import id.xxx.map.box.search.data.mapper.toListPlacesModel
 import id.xxx.map.box.search.data.source.local.LocalDataSource
 import id.xxx.map.box.search.data.source.remote.RemoteDataSource
 import id.xxx.map.box.search.domain.repository.IRepository
-import id.xxx.module.model.sealed.Result
 import id.xxx.module.data.mediator.ResourceNetworkBound
-import id.xxx.module.model.sealed.Resource
+import id.xxx.module.domain.model.resources.Resources
+import id.xxx.module.domain.model.results.Results
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 
@@ -26,23 +26,22 @@ class RepositoryImpl(
         blockShouldFetch = { localDataSource.isShouldFetch(query) },
         blockFetch = { remoteDataSource.getPlaces(query) },
         blockOnFetch = { apiResponse, _ ->
-            if (apiResponse is Result.Success) {
-                localDataSource.saveDataPlaces(apiResponse.data.toListPlacesEntity(query))
+            if (apiResponse is Results.Success) {
+                localDataSource.saveDataPlaces(apiResponse.result.toListPlacesEntity(query))
             }
         }
     )
 
     override fun getAddress(value: String?) = flow {
-        emit(Resource.Loading)
+        emit(Resources.Loading)
 
         val result =
             if (value.isNullOrBlank()) {
-                Resource.Empty
+                Resources.Empty
             } else {
                 when (val data = address.geoCoder(value)) {
-                    is Result.Success -> Resource.Success(data.data.toAddressModel())
-                    is Result.Error -> Resource.Error(error = data.error)
-                    is Result.Empty -> Resource.Empty
+                    is Results.Success -> Resources.Success(data.result.toAddressModel())
+                    is Results.Error -> Resources.Error(error = data.error)
                 }
             }
         emit(result)

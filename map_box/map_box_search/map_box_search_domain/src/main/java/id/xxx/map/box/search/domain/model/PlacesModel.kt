@@ -1,7 +1,7 @@
 package id.xxx.map.box.search.domain.model
 
 import android.os.Parcelable
-import id.xxx.module.model.IModel
+import id.xxx.module.domain.model.IModel
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

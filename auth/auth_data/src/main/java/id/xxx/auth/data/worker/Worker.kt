@@ -5,7 +5,7 @@ import androidx.work.CoroutineWorker
 import androidx.work.Data
 import androidx.work.WorkerParameters
 import id.xxx.auth.data.email.source.remote.RemoteDataSource
-import id.xxx.module.model.sealed.Result.Success
+import id.xxx.module.domain.model.results.Results.Success
 import kotlinx.coroutines.flow.first
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject

@@ -8,7 +8,7 @@ import id.xxx.auth.data.email.source.mapper.toUserResponse
 import id.xxx.auth.data.email.source.remote.response.UserResponse
 import id.xxx.module.data.helper.DataHelper
 import id.xxx.module.data.test.espresso.EspressoIdlingResource
-import id.xxx.module.model.sealed.Result
+import id.xxx.module.domain.model.results.Results
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withTimeout
@@ -27,7 +27,7 @@ class RemoteDataSource(
         }
     )
 
-    fun signUp(email: String, password: String): Flow<Result<UserResponse>> {
+    fun signUp(email: String, password: String): Flow<Results<UserResponse>> {
         val flow = DataHelper.getAsFlow(
             blockFetch = {
                 val result = auth.createUserWithEmailAndPassword(email, password)
@@ -40,7 +40,7 @@ class RemoteDataSource(
         return flow
     }
 
-    fun sendVerification(): Flow<Result<String>> {
+    fun sendVerification(): Flow<Results<String>> {
         val flow = DataHelper.getAsFlow(
             blockFetch = {
                 if (auth.currentUser?.isEmailVerified == true) {
@@ -61,7 +61,7 @@ class RemoteDataSource(
         }
     )
 
-    fun signIn(email: String, password: String): Flow<Result<UserResponse>> {
+    fun signIn(email: String, password: String): Flow<Results<UserResponse>> {
         val flow = DataHelper.getAsFlow(
             blockFetch = {
                 withTimeout(10000) {

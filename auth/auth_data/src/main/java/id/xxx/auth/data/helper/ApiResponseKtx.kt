@@ -1,13 +1,11 @@
 package id.xxx.auth.data.helper
 
-import id.xxx.module.model.sealed.Result
+import id.xxx.module.domain.model.results.Results
 
-suspend fun <T> Result<T>.get(
+suspend fun <T> Results<T>.get(
     blockSuccess: suspend (T) -> Unit = {},
     blockError: suspend (Throwable) -> Unit = {},
-    blockEmpty: suspend () -> Unit = {},
 ) = when (this) {
-    is Result.Success -> blockSuccess(this.data)
-    is Result.Error -> blockError(this.error)
-    is Result.Empty -> blockEmpty()
+    is Results.Success -> blockSuccess(this.result)
+    is Results.Error -> blockError(this.error)
 }
